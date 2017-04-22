@@ -14,7 +14,7 @@ class FlickrSearcher {
     
     var images: [Int:UIImage] = [:]
     
-    let LIMIT = 21
+    let LIMIT = Constants.NumberOfImages
     
     init(latitude: Double, longitude: Double) {
         self.latitude = latitude
@@ -97,7 +97,9 @@ class FlickrSearcher {
                     }
                     
                     self.images[photoIndex] = UIImage(data: imageData)!
-                    renderer()
+                    DispatchQueue.main.async {
+                        renderer()
+                    }
                     
                     photoIndex += 1
                 }

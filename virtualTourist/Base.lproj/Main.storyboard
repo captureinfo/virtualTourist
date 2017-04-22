@@ -82,53 +82,49 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="ZQr-9h-DuE"/>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="KEY-e8-lNt">
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="356" id="tq4-KT-s14"/>
-                                </constraints>
+                                <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="eeH-LC-OuT">
-                                    <size key="itemSize" width="50" height="50"/>
+                                    <size key="itemSize" width="114" height="113"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="imageCell" id="rdv-KE-ZXE" customClass="ImageCell" customModule="virtualTourist" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="114" height="113"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="114" height="113"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="l90-jE-9U8"/>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="uZq-wB-K3S"/>
                                             </subviews>
                                         </view>
                                         <constraints>
-                                            <constraint firstItem="l90-jE-9U8" firstAttribute="top" secondItem="rdv-KE-ZXE" secondAttribute="top" id="2B7-AZ-cYl"/>
-                                            <constraint firstAttribute="trailing" secondItem="l90-jE-9U8" secondAttribute="trailing" id="Y70-vo-zKP"/>
-                                            <constraint firstAttribute="bottom" secondItem="l90-jE-9U8" secondAttribute="bottom" id="Zhe-ag-HNn"/>
-                                            <constraint firstItem="l90-jE-9U8" firstAttribute="leading" secondItem="rdv-KE-ZXE" secondAttribute="leading" id="le8-Ag-P6c"/>
+                                            <constraint firstAttribute="trailing" secondItem="uZq-wB-K3S" secondAttribute="trailing" id="Odu-wt-t4x"/>
+                                            <constraint firstItem="uZq-wB-K3S" firstAttribute="leading" secondItem="rdv-KE-ZXE" secondAttribute="leading" id="ghQ-tR-hF3"/>
+                                            <constraint firstItem="uZq-wB-K3S" firstAttribute="top" secondItem="rdv-KE-ZXE" secondAttribute="top" id="jDm-Xy-MUZ"/>
+                                            <constraint firstAttribute="bottom" secondItem="uZq-wB-K3S" secondAttribute="bottom" id="qNR-WQ-Pn2"/>
                                         </constraints>
                                         <connections>
-                                            <outlet property="image" destination="l90-jE-9U8" id="WsC-Ds-Rf7"/>
+                                            <outlet property="imageView" destination="uZq-wB-K3S" id="LGV-TW-ax7"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="t1g-iK-C5F"/>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="KEY-e8-lNt" firstAttribute="top" secondItem="ZQr-9h-DuE" secondAttribute="bottom" id="0bG-ny-bMq"/>
-                            <constraint firstAttribute="trailing" secondItem="KEY-e8-lNt" secondAttribute="trailing" id="7S8-cM-3Fr"/>
-                            <constraint firstItem="ZQr-9h-DuE" firstAttribute="leading" secondItem="WJc-Ct-OG4" secondAttribute="leading" id="BnL-4C-pQV"/>
-                            <constraint firstItem="KEY-e8-lNt" firstAttribute="leading" secondItem="WJc-Ct-OG4" secondAttribute="leading" id="McH-fY-ydF"/>
-                            <constraint firstItem="KEY-e8-lNt" firstAttribute="bottom" secondItem="kQj-gM-EN5" secondAttribute="top" id="N8j-6A-prV"/>
-                            <constraint firstAttribute="trailing" secondItem="ZQr-9h-DuE" secondAttribute="trailing" id="Ppj-Vt-ZeH"/>
-                            <constraint firstItem="KEY-e8-lNt" firstAttribute="leading" secondItem="ZQr-9h-DuE" secondAttribute="leading" id="bNz-Gf-Sip"/>
-                            <constraint firstItem="ZQr-9h-DuE" firstAttribute="top" secondItem="9Xj-XB-U3y" secondAttribute="bottom" id="bXz-Uf-p6X"/>
-                            <constraint firstItem="KEY-e8-lNt" firstAttribute="trailing" secondItem="ZQr-9h-DuE" secondAttribute="trailing" id="g1G-vs-2Yv"/>
+                            <constraint firstItem="KEY-e8-lNt" firstAttribute="top" secondItem="9Xj-XB-U3y" secondAttribute="bottom" constant="200" id="9qd-An-jZ5"/>
+                            <constraint firstItem="t1g-iK-C5F" firstAttribute="leading" secondItem="KEY-e8-lNt" secondAttribute="leading" id="Gs5-mc-qi5"/>
+                            <constraint firstItem="t1g-iK-C5F" firstAttribute="trailing" secondItem="KEY-e8-lNt" secondAttribute="trailing" id="HHK-ww-73e"/>
+                            <constraint firstAttribute="trailing" secondItem="KEY-e8-lNt" secondAttribute="trailing" id="SAV-YD-LVs"/>
+                            <constraint firstItem="KEY-e8-lNt" firstAttribute="leading" secondItem="WJc-Ct-OG4" secondAttribute="leading" id="V9L-x5-epn"/>
+                            <constraint firstItem="t1g-iK-C5F" firstAttribute="top" secondItem="9Xj-XB-U3y" secondAttribute="bottom" id="jaf-lW-bZP"/>
+                            <constraint firstItem="KEY-e8-lNt" firstAttribute="bottom" secondItem="kQj-gM-EN5" secondAttribute="top" id="xAK-6w-Roe"/>
+                            <constraint firstItem="KEY-e8-lNt" firstAttribute="top" secondItem="t1g-iK-C5F" secondAttribute="bottom" id="ycY-hs-0j8"/>
                         </constraints>
                     </view>
                     <toolbarItems/>
@@ -136,7 +132,7 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="collectionView" destination="KEY-e8-lNt" id="rbH-2z-Kby"/>
-                        <outlet property="mapView" destination="ZQr-9h-DuE" id="RYq-7j-ufJ"/>
+                        <outlet property="mapView" destination="t1g-iK-C5F" id="E6f-Jg-PR8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eCn-fe-u7I" sceneMemberID="firstResponder"/>
