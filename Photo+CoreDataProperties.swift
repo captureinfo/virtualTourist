@@ -2,7 +2,7 @@
 //  Photo+CoreDataProperties.swift
 //  virtualTourist
 //
-//  Created by Yang Gao on 4/12/17.
+//  Created by Yang Gao on 5/1/17.
 //  Copyright © 2017 Yang Gao. All rights reserved.
 //
 
@@ -15,9 +15,8 @@ extension Photo {
         return NSFetchRequest<Photo>(entityName: "Photo");
     }
 
-    @NSManaged public var id: String?
-    @NSManaged public var owner: String?
-    @NSManaged public var isPhotoDeleted: Bool
+    @NSManaged public var image: NSData?
+    @NSManaged public var id: Int64
     @NSManaged public var pin: Pin?
 
 }

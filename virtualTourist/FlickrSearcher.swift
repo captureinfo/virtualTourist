@@ -7,18 +7,46 @@
 //
 
 import MapKit
+import CoreData
 
 class FlickrSearcher {
     let latitude: Double
     let longitude: Double
+    let pinUuid: String
+    let pin: Pin
+    
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    
+    var nextPhotoIndex: Int
     
     var images: [Int:UIImage] = [:]
     
-    let LIMIT = Constants.NumberOfImages
+    let LIMIT = Constants.MaxNumberOfImagesOnScreen
     
-    init(latitude: Double, longitude: Double) {
+    init?(latitude: Double, longitude: Double, pinUuid: String) {
         self.latitude = latitude
         self.longitude = longitude
+        self.pinUuid = pinUuid
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return nil
+        }
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName:"Pin")
+        
+        fetchRequest.predicate = NSPredicate(format: "uuid == %@", self.pinUuid)
+        
+        var pins: [NSManagedObject]!
+        do{
+            pins = try managedContext.fetch(fetchRequest)
+        }catch let error as NSError {
+            print("Could not fetch. \(error)")
+        }
+        if (pins.count == 0) {
+            print("Bug: no pin found")
+            return nil
+        }
+        self.pin = pins[0] as! Pin
+        self.nextPhotoIndex = Int(pin.nextPhotoIndex)
     }
     
     func search(_ renderer: @escaping () -> ()) {
@@ -79,8 +107,8 @@ class FlickrSearcher {
                 print("No Photos Found. Search Again.")
                 return
             } else {
-                var photoIndex = 0
-                while photoIndex < self.LIMIT && photoIndex < photosArray.count {
+                var photoIndex = self.nextPhotoIndex
+                while photoIndex < self.nextPhotoIndex + self.LIMIT && photoIndex < photosArray.count {
                     let photoDictionary = photosArray[photoIndex] as [String: AnyObject]
                     
                     /* GUARD: Does our photo have a key for 'url_m'? */
@@ -96,13 +124,21 @@ class FlickrSearcher {
                         return
                     }
                     
-                    self.images[photoIndex] = UIImage(data: imageData)!
+                    self.images[photoIndex - self.nextPhotoIndex] = UIImage(data: imageData)!
+                    let managedContext = self.appDelegate.persistentContainer.viewContext
+                    let fetchRequest = NSFetchRequest<NSManagedObject>(entityName:"Pin")
+                    fetchRequest.predicate = NSPredicate(format: "uuid == %@", self.pinUuid)
+                    let pin = (try! managedContext.fetch(fetchRequest))[0]
+                    
+                    
                     DispatchQueue.main.async {
                         renderer()
                     }
                     
                     photoIndex += 1
                 }
+                self.nextPhotoIndex = photoIndex
+                self.pin.setValue(photoIndex, forKey: "nextPhotoIndex")
             }
         }
         task.resume()

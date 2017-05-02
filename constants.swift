@@ -66,5 +66,5 @@ struct Constants {
         static let OKStatus = "ok"
     }
 
-    static let NumberOfImages = 21
+    static let MaxNumberOfImagesOnScreen = 21
 }

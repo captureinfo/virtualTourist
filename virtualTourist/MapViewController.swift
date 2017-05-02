@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import CoreData
 
 class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognizerDelegate {
     
@@ -59,7 +60,24 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
             // Add annotation:
             let annotation = MKPointAnnotation()
             annotation.coordinate = coordinate
+            let uuid = UUID().uuidString
+            annotation.title = uuid
             mapView.addAnnotation(annotation)
+            
+            let managedContext = appDelegate.persistentContainer.viewContext
+            
+            let entity = NSEntityDescription.entity(forEntityName: "Pin", in: managedContext)!
+            
+            let pin = NSManagedObject(entity: entity, insertInto: managedContext)
+            pin.setValue(coordinate.latitude, forKey: "latitude")
+            pin.setValue(coordinate.longitude, forKey: "longitude")
+            pin.setValue(uuid, forKey: "uuid")
+            pin.setValue(0, forKey: "nextPhotoIndex")
+            do {
+                try managedContext.save()
+            }catch let error as NSError {
+                print("Could not save \(error)")
+            }
         }
     }
     
@@ -68,7 +86,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
         backItem.title = "Back"
         navigationItem.backBarButtonItem = backItem
         if let annotation = sender as? MKAnnotation {
-            (segue.destination as! PhotosViewController).pinLocation = annotation.coordinate
+            let photosViewController = segue.destination as! PhotosViewController
+            photosViewController.pinLocation = annotation.coordinate
+            photosViewController.pinUuid = annotation.title!
         }
     }
     
@@ -76,8 +96,14 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
         if editMode {
             if let annotation = view.annotation {
                 self.mapView.removeAnnotation(annotation)
+                let managedContext = appDelegate.persistentContainer.viewContext
+                let fetchRequest = NSFetchRequest<NSManagedObject>(entityName:"Pin")
+                fetchRequest.predicate = NSPredicate(format: "uuid == %@", annotation.title!!)
+                let pins = try! managedContext.fetch(fetchRequest)
+                managedContext.delete(pins[0])
             }
         } else {
+            self.mapView.deselectAnnotation(view.annotation, animated: false)
             self.performSegue(withIdentifier: "pinDetailsSegue", sender: view.annotation)
         }
     }

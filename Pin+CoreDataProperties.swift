@@ -2,7 +2,7 @@
 //  Pin+CoreDataProperties.swift
 //  virtualTourist
 //
-//  Created by Yang Gao on 4/12/17.
+//  Created by Yang Gao on 5/1/17.
 //  Copyright © 2017 Yang Gao. All rights reserved.
 //
 
@@ -17,6 +17,8 @@ extension Pin {
 
     @NSManaged public var latitude: Double
     @NSManaged public var longitude: Double
+    @NSManaged public var nextPhotoIndex: Int64
+    @NSManaged public var uuid: String?
     @NSManaged public var photo: NSSet?
 
 }
