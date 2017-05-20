@@ -16,6 +16,7 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, MKMapVie
     @IBAction func editCollection(_ sender: UIButton) {
         let indexPaths = collectionView.indexPathsForSelectedItems!
         if indexPaths.count > 0 {
+            flickrSearcher.deletePhotos(indexPaths.map {$0.item})
             self.collectionView.deleteItems(at: indexPaths)
             self.editCollectionButton.setTitle("New Collection", for: .normal)
         } else {
@@ -77,16 +78,16 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, MKMapVie
     }
     
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if flickrSearcher == nil {
+        if flickrSearcher == nil || flickrSearcher.images == nil {
             return 0
         } else {
-            return flickrSearcher.images.count
+            return flickrSearcher.images!.count
         }
     }
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "imageCell", for: indexPath) as! ImageCell
-        if let image = self.flickrSearcher?.images[indexPath.item] {
+        if let image = self.flickrSearcher?.images![indexPath.item] {
             cell.imageView.image = image
         }
         return cell

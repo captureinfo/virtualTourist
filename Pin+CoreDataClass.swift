@@ -2,7 +2,7 @@
 //  Pin+CoreDataClass.swift
 //  virtualTourist
 //
-//  Created by Yang Gao on 5/1/17.
+//  Created by Yang Gao on 5/10/17.
 //  Copyright © 2017 Yang Gao. All rights reserved.
 //
 
