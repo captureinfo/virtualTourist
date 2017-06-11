@@ -19,7 +19,7 @@ class FlickrSearcher {
     
     var nextPhotoIndex: Int
     
-    var images: [UIImage?]?
+    var urlsAndImages: [(String, UIImage)?]?
     
     let LIMIT = Constants.MaxNumberOfImagesOnScreen
     
@@ -107,7 +107,7 @@ class FlickrSearcher {
                 print("No Photos Found. Search Again.")
                 return
             } else {
-                self.images = [UIImage?](repeating: nil, count: min(photosArray.count, self.LIMIT))
+                self.urlsAndImages = [(String, UIImage)?](repeating: nil, count: min(photosArray.count, self.LIMIT))
                 var photoIndex = self.nextPhotoIndex
                 while photoIndex < self.nextPhotoIndex + self.LIMIT && photoIndex < photosArray.count {
                     let photoDictionary = photosArray[photoIndex] as [String: AnyObject]
@@ -125,14 +125,13 @@ class FlickrSearcher {
                         return
                     }
                     
-                    self.images![photoIndex - self.nextPhotoIndex] = UIImage(data: imageData)!
+                    self.urlsAndImages?[photoIndex - self.nextPhotoIndex] = ((imageURL?.absoluteString)!, UIImage(data: imageData)!)
                     let managedContext = self.appDelegate.persistentContainer.viewContext
                     let entity = NSEntityDescription.entity(forEntityName: "Photo", in: managedContext)
                     let photo = NSManagedObject(entity: entity!, insertInto: managedContext)
                     photo.setValue(imageUrlString, forKey: "id")
                     photo.setValue(imageData, forKey: "image")
                     photo.setValue(self.pin, forKey: "pin")
-                    
                     do {
                         try managedContext.save()
                     }catch let error as NSError {
@@ -153,7 +152,21 @@ class FlickrSearcher {
     }
     
     func deletePhotos(_ indexPaths: [Int]) {
-        images = images!.enumerated().flatMap { indexPaths.contains($0.0) ? nil : $0.1 }.filter { $0 != nil }
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+             return
+        }
+        let context = appDelegate.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName:"Photo")
+        fetchRequest.predicate = NSPredicate(format: "pin.uuid == %@", self.pinUuid)
+        if let result = try? context.fetch(fetchRequest) {
+            let urlsToDelete = self.urlsAndImages?.enumerated().flatMap { indexPaths.contains($0.0) ? $0.1?.0 : nil}.filter { $0 != nil }
+            for object in result {
+                if (urlsToDelete?.contains((object as! Photo).id!))! {
+                    context.delete(object)
+                }
+            }
+        }
+        self.urlsAndImages = self.urlsAndImages?.enumerated().flatMap { indexPaths.contains($0.0) ? nil : $0.1 }.filter { $0 != nil }
     }
     
     private func bboxString() -> String {
