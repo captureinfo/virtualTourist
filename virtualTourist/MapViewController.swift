@@ -42,6 +42,30 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName:"Pin")
+        do {
+            let pins = try managedContext.fetch(fetchRequest)
+            for result in pins {
+                let pin = result as! Pin
+                let annotation = MKPointAnnotation()
+                annotation.coordinate = CLLocationCoordinate2D(latitude: pin.latitude, longitude: pin.longitude)
+                annotation.title = pin.uuid
+                mapView.addAnnotation(annotation)
+            }
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+        }
+        do {
+            try managedContext.save()
+        }catch let error as NSError {
+            print("Could not save \(error)")
+        }
+
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -100,7 +124,12 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
                 let fetchRequest = NSFetchRequest<NSManagedObject>(entityName:"Pin")
                 fetchRequest.predicate = NSPredicate(format: "uuid == %@", annotation.title!!)
                 let pins = try! managedContext.fetch(fetchRequest)
-                managedContext.delete(pins[0])
+                managedContext.delete(pins[0] as! Pin)
+                do {
+                    try managedContext.save()
+                }catch let error as NSError {
+                    print("Could not save \(error)")
+                }
             }
         } else {
             self.mapView.deselectAnnotation(view.annotation, animated: false)

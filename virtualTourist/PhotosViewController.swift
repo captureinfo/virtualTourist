@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import CoreData
 
 class PhotosViewController: UIViewController, UICollectionViewDelegate, MKMapViewDelegate,UICollectionViewDataSource {
     
@@ -17,10 +18,20 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, MKMapVie
         let indexPaths = collectionView.indexPathsForSelectedItems!
         if indexPaths.count > 0 {
             flickrSearcher.deletePhotos(indexPaths.map {$0.item})
-            
             self.collectionView.deleteItems(at: indexPaths)
             self.editCollectionButton.setTitle("New Collection", for: .normal)
         } else {
+            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+                return
+            }
+            let context = appDelegate.persistentContainer.viewContext
+            let fetchRequest = NSFetchRequest<NSManagedObject>(entityName:"Photo")
+            fetchRequest.predicate = NSPredicate(format: "pin.uuid == %@", self.pinUuid)
+            if let result = try? context.fetch(fetchRequest) {
+                for object in result {
+                    context.delete(object)
+                }
+            }
             self.flickrSearcher?.search() {
                 self.collectionView.reloadData()
             }
