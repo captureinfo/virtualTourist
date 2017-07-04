@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A517320B1EA2DF0400E10AA6 /* FlickrSearcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A517320A1EA2DF0400E10AA6 /* FlickrSearcher.swift */; };
+		A517320B1EA2DF0400E10AA6 /* PhotosService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A517320A1EA2DF0400E10AA6 /* PhotosService.swift */; };
 		A51732101EA9A6E500E10AA6 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A517320F1EA9A6E500E10AA6 /* ImageCell.swift */; };
 		A51ABB601EC2C838001D8EDC /* Pin+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51ABB5C1EC2C838001D8EDC /* Pin+CoreDataClass.swift */; };
 		A51ABB611EC2C838001D8EDC /* Pin+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51ABB5D1EC2C838001D8EDC /* Pin+CoreDataProperties.swift */; };
@@ -43,7 +43,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		A517320A1EA2DF0400E10AA6 /* FlickrSearcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlickrSearcher.swift; sourceTree = "<group>"; };
+		A517320A1EA2DF0400E10AA6 /* PhotosService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosService.swift; sourceTree = "<group>"; };
 		A517320F1EA9A6E500E10AA6 /* ImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
 		A51ABB5C1EC2C838001D8EDC /* Pin+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Pin+CoreDataClass.swift"; sourceTree = "<group>"; };
 		A51ABB5D1EC2C838001D8EDC /* Pin+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Pin+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -122,7 +122,7 @@
 				A5815DF71E988CB500259121 /* Main.storyboard */,
 				A517320F1EA9A6E500E10AA6 /* ImageCell.swift */,
 				A5815E231E9984A800259121 /* PhotosViewController.swift */,
-				A517320A1EA2DF0400E10AA6 /* FlickrSearcher.swift */,
+				A517320A1EA2DF0400E10AA6 /* PhotosService.swift */,
 				A5815DFA1E988CB500259121 /* Assets.xcassets */,
 				A5815DFC1E988CB500259121 /* LaunchScreen.storyboard */,
 				A5815DFF1E988CB500259121 /* Info.plist */,
@@ -297,7 +297,7 @@
 				A51ABB621EC2C838001D8EDC /* Photo+CoreDataClass.swift in Sources */,
 				A51732101EA9A6E500E10AA6 /* ImageCell.swift in Sources */,
 				A51ABB611EC2C838001D8EDC /* Pin+CoreDataProperties.swift in Sources */,
-				A517320B1EA2DF0400E10AA6 /* FlickrSearcher.swift in Sources */,
+				A517320B1EA2DF0400E10AA6 /* PhotosService.swift in Sources */,
 				A5815E241E9984A800259121 /* PhotosViewController.swift in Sources */,
 				A5815E2B1E9AC8B900259121 /* DataModel.xcdatamodeld in Sources */,
 				A5815DF61E988CB500259121 /* MapViewController.swift in Sources */,

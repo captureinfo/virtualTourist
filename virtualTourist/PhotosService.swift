@@ -1,5 +1,5 @@
 //
-//  FlickrSearcher.swift
+//  PhotosService.swift
 //  virtualTourist
 //
 //  Created by Yang Gao on 4/15/17.
@@ -9,7 +9,7 @@
 import MapKit
 import CoreData
 
-class FlickrSearcher {
+class PhotosService {
     let latitude: Double
     let longitude: Double
     let pinUuid: String
@@ -31,13 +31,13 @@ class FlickrSearcher {
             return nil
         }
         let managedContext = appDelegate.persistentContainer.viewContext
-        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName:"Pin")
+        let pinFetchRequest = NSFetchRequest<NSManagedObject>(entityName:"Pin")
         
-        fetchRequest.predicate = NSPredicate(format: "uuid == %@", self.pinUuid)
+        pinFetchRequest.predicate = NSPredicate(format: "uuid == %@", self.pinUuid)
         
         var pins: [NSManagedObject]!
         do{
-            pins = try managedContext.fetch(fetchRequest)
+            pins = try managedContext.fetch(pinFetchRequest)
         }catch let error as NSError {
             print("Could not fetch. \(error)")
         }
@@ -47,6 +47,26 @@ class FlickrSearcher {
         }
         self.pin = pins[0] as! Pin
         self.nextPhotoIndex = Int(pin.nextPhotoIndex)
+        
+        let photoFetchRequest = NSFetchRequest<NSManagedObject>(entityName:"Photo")
+        photoFetchRequest.predicate = NSPredicate(format: "pin.uuid == %@", self.pinUuid)
+        
+        var photos: [NSManagedObject]!
+        do {
+            photos = try managedContext.fetch(photoFetchRequest)
+        } catch let error as NSError {
+            print("Could not fetch. \(error)")
+        }
+        
+        if (!photos.isEmpty) {
+            var photoIndex = 0
+            self.urlsAndImages = [(String, UIImage)?](repeating: nil, count: photos.count)
+            for object in photos {
+                let photo = object as! Photo
+                self.urlsAndImages?[photoIndex] = (photo.id!, UIImage(data: photo.image as! Data)!)
+                photoIndex += 1
+            }
+        }
     }
     
     func search(_ renderer: @escaping () -> ()) {
@@ -153,7 +173,7 @@ class FlickrSearcher {
     
     func deletePhotos(_ indexPaths: [Int]) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-             return
+            return
         }
         let context = appDelegate.persistentContainer.viewContext
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName:"Photo")
@@ -164,6 +184,11 @@ class FlickrSearcher {
                 if (urlsToDelete?.contains((object as! Photo).id!))! {
                     context.delete(object)
                 }
+            }
+            do {
+                try context.save()
+            }catch let error as NSError {
+                print("Could not save \(error)")
             }
         }
         self.urlsAndImages = self.urlsAndImages?.enumerated().flatMap { indexPaths.contains($0.0) ? nil : $0.1 }.filter { $0 != nil }

@@ -17,7 +17,7 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, MKMapVie
     @IBAction func editCollection(_ sender: UIButton) {
         let indexPaths = collectionView.indexPathsForSelectedItems!
         if indexPaths.count > 0 {
-            flickrSearcher.deletePhotos(indexPaths.map {$0.item})
+            photosService.deletePhotos(indexPaths.map {$0.item})
             self.collectionView.deleteItems(at: indexPaths)
             self.editCollectionButton.setTitle("New Collection", for: .normal)
         } else {
@@ -32,7 +32,7 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, MKMapVie
                     context.delete(object)
                 }
             }
-            self.flickrSearcher?.search() {
+            self.photosService?.search() {
                 self.collectionView.reloadData()
             }
         }
@@ -43,7 +43,7 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, MKMapVie
     var pinLocation: CLLocationCoordinate2D!
     var pinUuid: String!
     
-    var flickrSearcher: FlickrSearcher!
+    var photosService: PhotosService!
     
     @IBOutlet weak var mapView: MKMapView!
     
@@ -52,18 +52,23 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, MKMapVie
         self.mapView.isScrollEnabled = false
         self.mapView.isUserInteractionEnabled = false
         super.viewDidLoad()
+        
         let pin = MKPointAnnotation()
         pin.coordinate = pinLocation
         mapView.addAnnotation(pin)
         mapView.centerCoordinate = pinLocation
+        
         collectionView.allowsMultipleSelection = true
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         
-        self.flickrSearcher = FlickrSearcher(latitude: pinLocation!.latitude, longitude: pinLocation!.longitude, pinUuid: pinUuid)
-        self.flickrSearcher.search() {
-            self.collectionView.reloadData()
+        self.photosService = PhotosService(latitude: pinLocation!.latitude, longitude:    pinLocation!.longitude, pinUuid: pinUuid)
+        
+        if (self.photosService.urlsAndImages == nil) {
+            self.photosService.search() {
+                self.collectionView.reloadData()
+            }
         }
     }
     
@@ -90,17 +95,19 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, MKMapVie
     }
     
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if flickrSearcher == nil || flickrSearcher.urlsAndImages?[1] == nil {
+        if photosService == nil || photosService.urlsAndImages?[0] == nil {
             return 0
         } else {
-            return flickrSearcher.urlsAndImages!.count
+            return photosService.urlsAndImages!.count
         }
     }
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "imageCell", for: indexPath) as! ImageCell
-        if let image = self.flickrSearcher?.urlsAndImages?[indexPath.item]?.1 {
+        if let image = self.photosService?.urlsAndImages?[indexPath.item]?.1 {
             cell.imageView.image = image
+        }else {
+            cell.imageView.image = #imageLiteral(resourceName: "placeholder")
         }
         return cell
     }

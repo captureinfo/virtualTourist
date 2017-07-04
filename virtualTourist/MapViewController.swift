@@ -46,6 +46,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
         super.viewWillAppear(animated)
         let managedContext = appDelegate.persistentContainer.viewContext
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName:"Pin")
+        mapView.removeAnnotations(mapView.annotations)
         do {
             let pins = try managedContext.fetch(fetchRequest)
             for result in pins {
